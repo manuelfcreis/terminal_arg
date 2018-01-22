@@ -1,7 +1,9 @@
 // Initial variables
+let phoneIsOn = false
 let matrixHasPlayed = false
 let playCount = 0
 let playArray = [false, false, false, false]
+let pillStage = false
 
 // Level Variables
 let rabbitStage = false
@@ -22,7 +24,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   let matrixHasPlayed = false
 
   let CMDS_ = [
-    'open', 'clear', 'date', 'echo', 'help', 'uname', 'whoami'
+    'open', 'clear', 'date', 'run', 'help', 'uname', 'whoami'
   ];
 
   let LIST_ = [
@@ -108,6 +110,30 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
         args = args.splice(1); // Remove cmd from arg list.
       }
 
+      if (phoneIsOn) {
+        switch (cmd) {
+          case '555-0690':
+            phoneIsOn = false
+            maze()
+            break;
+          default:
+            output('Couldn\'t connect to that phone number, goodbye!')
+            phoneIsOn = false
+            break;
+          };
+      } else if (pillStage) {
+          switch (cmd) {
+            case 'blue':
+              location.reload();
+              break;
+            case 'red':
+              redpill();
+              break;
+            default:
+              write("red or blue there is no other choice")
+              break;
+          }
+      } else {
       switch (cmd) {
         case 'open':
           var url = args.join(' ');
@@ -115,8 +141,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
             output('Usage: ' + cmd + ' website...');
             output('Example: ' + cmd + ' https://www.enso.pt/example_url.html');
             break;
-          }
-          if (url == "https://www.enso.pt/example_url.html") {
+          } else if (url == "https://www.enso.pt/example_url.html") {
             window.open("example_url.html")
           } else {
           $.get( url, function(data) {
@@ -130,20 +155,23 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
         case 'date':
           output( new Date() );
           break;
-        case 'echo':
-         if (args.includes('matrix') || args.includes('Matrix')) {
+        case 'run':
+         if (args.includes('matrix.exe')) {
            window.setTimeout(theMatrix(), 1000);
-           break;
-         } else if (args.includes('rabbit') || args.includes('Rabbit')) {
+         } else if (args.includes('rabbit.exe')) {
+           output_.innerHTML = '';
            write(ascii(rabbit));
-           break;
-         } else if (args.includes('maze') || args.includes('Maze')) {
+         } else if (args.includes('maze.exe')) {
            maze();
-           break;
+         } else if (args.includes('phone.exe')) {
+           output('Operator, who do you want to call?')
+           phoneIsOn = true
          } else {
-           output( args.join(' ') );
-           break;
+           output( 'Sorry, couldn\'t find that program' );
+           output('Usage: ' + cmd + ' object.exe');
+           output('Example: ' + cmd + ' phone.exe');
          }
+         break;
         case 'help':
           output('<div class="ls-files">' + CMDS_.join('<br>') + '</div>');
           break;
@@ -207,13 +235,15 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
         case 'look':
           if (mazeStage === true) {
             if (playCount === 0) {
-              output('the cubicle across from you is empty')
+              output('the cubicle across from you is empty');
             } else if (playCount === 1){
-              output('Stay here for just a moment')
+              output('Stay here for just a moment');
+              window.setTimeout(function() { write('go left') }, 3000);
             } else if (playCount === 2){
-              output('When I tell you, go to the end of the row')
+              output('When I tell you, go to the end of the row');
+              window.setTimeout(function() { write('to your right') }, 3000);
             } else if (playCount === 3){
-              output('Go, now')
+              output('to the end of the row')
             }
           } else {
             output('right' + ': command not found');
@@ -224,6 +254,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
             output(cmd + ': command not found');
           }
       };
+    }
 
       window.scrollTo(0, getDocHeight_());
       this.value = ''; // Clear/setup line for next input.
@@ -286,22 +317,27 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
 
   function theMatrix(interval) {
     window.setTimeout(function() { write('.') }, interval);
-    window.setTimeout(function() { write('.') }, interval + 3000);
-    window.setTimeout(function() { write('.') }, interval + 6000);
-    window.setTimeout(function() { write('<br>') }, interval + 6000);
-    window.setTimeout(function() { typeOut("Wake up Neo", 0, 100) }, interval + 9000);
-    window.setTimeout(function() { typeOut("The Matrix has you", 0, 100) }, interval + 15500);
-    window.setTimeout(function() { typeOut("Follow the White Rabbit", 0, 100) }, interval + 25500);
+    window.setTimeout(function() { write('.') }, interval + 1000);
+    window.setTimeout(function() { write('.') }, interval + 2000);
+    window.setTimeout(function() { write('<br>') }, interval + 2000);
+    window.setTimeout(function() { typeOut("Wake up Neo", 0, 150) }, interval + 5000);
+    window.setTimeout(function() { typeOut("The Matrix has you", 0, 150) }, interval + 10000);
+    window.setTimeout(function() { typeOut("Follow the White Rabbit", 0, 150) }, interval + 20000);
     matrixHasPlayed = true
   }
 
+  function theClub(interval) {
+    window.setTimeout(function() { typeOut("I know why you're here", 0, 150) }, interval + 5000);
+    window.setTimeout(function() { typeOut("I know what you've been going through", 0, 150) }, interval + 10000);
+    window.setTimeout(function() { typeOut("You're looking for it", 0, 150) }, interval + 20000);
+  }
   //
   return {
     init: function() {
         window.setTimeout(function() {
           if (matrixHasPlayed === false) {
-            theMatrix(5000);
-        }}, 001);
+            theMatrix(1000);
+        }}, 0001);
       },
     output: output
   }
@@ -334,9 +370,105 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
 
   function endGame() {
-    output('You won ya filthy animal')
+    output_.innerHTML = '';
+    pill();
+  }
+
+  function redpill() {
+    $('.header').hide
+    $('#container').hide
+    var canvas = document.getElementById( 'canvas' ),
+		ctx = canvas.getContext( '2d' ),
+    canvas2 = document.getElementById( 'canvas2' ),
+    ctx2 = ctx
+		// full screen dimensions
+		cw = window.innerWidth,
+		ch = window.innerHeight,
+    charArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
+    maxCharCount = 100,
+    fallingCharArr = [],
+    fontSize = 10,
+    maxColums = cw/(fontSize);
+    canvas.width = canvas2.width = cw;
+    canvas.height = canvas2.height = ch;
+
+
+    function randomInt( min, max ) {
+    	return Math.floor(Math.random() * ( max - min ) + min);
+    }
+
+    function randomFloat( min, max ) {
+    	return Math.random() * ( max - min ) + min;
+    }
+
+    function Point(x,y)
+    {
+      this.x = x;
+      this.y = y;
+    }
+
+    Point.prototype.draw = function(ctx){
+
+      this.value = charArr[randomInt(0,charArr.length-1)].toUpperCase();
+      this.speed = randomFloat(1,5);
+
+
+      ctx2.fillStyle = "rgba(255,255,255,0.8)";
+      ctx2.font = fontSize+"px san-serif";
+      ctx2.fillText(this.value,this.x,this.y);
+
+        ctx.fillStyle = "#0F0";
+        ctx.font = fontSize+"px san-serif";
+        ctx.fillText(this.value,this.x,this.y);
+
+
+
+        this.y += this.speed;
+        if(this.y > ch)
+        {
+          this.y = randomFloat(-100,0);
+          this.speed = randomFloat(2,5);
+        }
+    }
+
+    for(var i = 0; i < maxColums ; i++) {
+      fallingCharArr.push(new Point(i*fontSize,randomFloat(-500,0)));
+    }
+
+
+    var update = function()
+    {
+
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,cw,ch);
+
+    ctx2.clearRect(0,0,cw,ch);
+
+      var i = fallingCharArr.length;
+
+      while (i--) {
+        fallingCharArr[i].draw(ctx);
+        var v = fallingCharArr[i];
+      }
+
+      requestAnimationFrame(update);
+    }
+    window.setTimeout(function() {
+      window.open("https://www.landingfestival.com")
+    }, 1000);
+  update();
+
+  }
+
+  function pill() {
+    output("This is your last chance. After this, there is no turning back.")
+    output("You take the blue pill - the story ends, you wake up in your bed and")
+    output("believe whatever you want to believe. You take the red pill -")
+    output("you stay in Wonderland and I show you how deep the rabbit-hole goes.")
+    pillStage = true
   }
 };
+
 
 
 const mazeScreen = "    \\                           /         " + "<br>" +
@@ -364,25 +496,25 @@ const mazeScreen = "    \\                           /         " + "<br>" +
 
  let rabbit = "               .,uuuuuu,," + "<br>" +
               "            ,%%uuu==#uuuu%%\\" + "<br>" +
-              "        ,,,<%%uu\".a.=#uuuu%%%%" + "<br>" +
+              "        ,,,<%%uu\".a.=#u5uu%%%%" + "<br>" +
               "     ,;;;;;)#uu...,#/uuu%%%%%%%" + "<br>" +
               "       \\;;/####\\%mmmmmmmmmnu%%`%%;" + "<br>" +
               "      u####\"\"\"' (mmmmmmmmmmnu%%`%%%%" + "<br>" +
-              "      uuuEE,..:;;#\\mmmmmmmnuu%;,`%%%%" + "<br>" +
-              "       uuuu\\#####/uu,mmmmmnu%..;, :.%%%" + "<br>" +
+              "      uuu5E,..:;;#\\mmmmmmmnuu%;,`%%%%" + "<br>" +
+              "       uuuu\\#####/uu,mmmmm5u%..;, :.%%%" + "<br>" +
               "          \\uuuuuuuuuuuuu,mnu/\\.;;  :..%%" + "<br>" +
               "            >##&&#######<%%%  \\;'   :.%%" + "<br>" +
               "         (###&&&#######%%%%%         :%'" + "<br>" +
               "       (###&&&&######(%%%%%%" + "<br>" +
               "      (#####&&&####(%%%%%%%%%" + "<br>" +
-              "       (###########(%%%%%%%%%%%" + "<br>" +
+              "       (###########(%%%%%%0%%%%" + "<br>" +
               "      %%(###########(%%%%%%%%%%%%" + "<br>" +
-              "     ;%%%(##########'%%%'%%%%%%%%%" + "<br>" +
+              "     ;%%%(####6#####'%%%'%%%%%%%%%" + "<br>" +
               "    (%%%%; ;n####n'%%%%'n%%%%%%%%%%(@)" + "<br>" +
               "     \\%%%' %%nnnn'%%%%'nnnn%%%%%%%(@@@)" + "<br>" +
               "      ``' %%%nnnn``'nnnnnn%%%%%%%%(@@@@)" + "<br>" +
-              "         ,%%%nnnnnnnnnnn%%%%%%%%%(@@@@@" + "<br>" +
+              "         ,%%%nnnnnnnnnnn%%%%%%9%%(@@@@@" + "<br>" +
               "  ,.,nnn%%%%nnnnn)nnnn%%%%%%%%%/  (@@)" + "<br>" +
               " (u(uuuuuuuuuuuuuu/ (u;;;;;;u)" + "<br>" +
               "                     (uuuuuuu)" + "<br>" +
-              "                       ()()()" + "<br>";
+              "                       ()0()" + "<br>";
