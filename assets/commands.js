@@ -22,8 +22,12 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   let matrixHasPlayed = false
 
   let CMDS_ = [
-    'cat', 'clear', 'date', 'echo', 'help', 'uname', 'whoami'
+    'open', 'clear', 'date', 'echo', 'help', 'uname', 'whoami'
   ];
+
+  let LIST_ = [
+    'README.md', 'assets', 'example_url', 'images'
+  ]
 
   var fs_ = null;
   var cwd_ = null;
@@ -105,19 +109,19 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       }
 
       switch (cmd) {
-        case 'cat':
+        case 'open':
           var url = args.join(' ');
           if (!url) {
-            output('Usage: ' + cmd + ' https://s.codepen.io/...');
-            output('Example: ' + cmd + ' https://s.codepen.io/AndrewBarfield/pen/LEbPJx.js');
+            output('Usage: ' + cmd + ' website...');
+            output('Example: ' + cmd + ' https://www.enso.pt/example_url.html');
             break;
           }
+          if (url == "https://www.enso.pt/example_url.html") {
+            window.open("example_url.html")
+          } else {
           $.get( url, function(data) {
-            var encodedStr = data.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-               return '&#'+i.charCodeAt(0)+';';
-            });
-            output('<pre>' + encodedStr + '</pre>');
-          });
+            window.open(url)
+          }); }
           break;
         case 'clear':
           output_.innerHTML = '';
@@ -281,13 +285,13 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   // Matrix Functions
 
   function theMatrix(interval) {
-    write('.')
+    window.setTimeout(function() { write('.') }, interval);
     window.setTimeout(function() { write('.') }, interval + 3000);
     window.setTimeout(function() { write('.') }, interval + 6000);
     window.setTimeout(function() { write('<br>') }, interval + 6000);
-    window.setTimeout(function() { typeOut("Wake up Neo", 0, 300) }, interval + 9000);
-    window.setTimeout(function() { typeOut("The Matrix has you", 0, 300) }, interval + 15500);
-    window.setTimeout(function() { typeOut("Follow the White Rabbit", 0, 300) }, interval + 25500);
+    window.setTimeout(function() { typeOut("Wake up Neo", 0, 100) }, interval + 9000);
+    window.setTimeout(function() { typeOut("The Matrix has you", 0, 100) }, interval + 15500);
+    window.setTimeout(function() { typeOut("Follow the White Rabbit", 0, 100) }, interval + 25500);
     matrixHasPlayed = true
   }
 
@@ -296,8 +300,8 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     init: function() {
         window.setTimeout(function() {
           if (matrixHasPlayed === false) {
-            theMatrix(60000);
-        }}, 60000);
+            theMatrix(5000);
+        }}, 001);
       },
     output: output
   }

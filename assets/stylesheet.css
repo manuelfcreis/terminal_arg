@@ -2,6 +2,7 @@
   background: #FF5E99;
 }
 html, body {
+  padding: 10px 20px;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -13,7 +14,8 @@ body {
   background-color: black;
 }
 #container {
-  padding: 15px 20px;
+  position: absolute;
+  top: 166px;
 }
 #container output {
   clear: both;
@@ -101,4 +103,42 @@ body {
 
 .sec {
    stroke: #f55;
+}
+
+
+/* images */
+
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.example-image {
+  height: 100vh;
+  position: absolute;
+}
+
+.hoverable {
+  transition: all 10s ease;
+}
+
+.hoverable:hover {
+  opacity: 0.7;
+}
+
+.header {
+  position: fixed;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.header-text {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
