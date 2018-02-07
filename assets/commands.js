@@ -342,6 +342,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     output: output
   }
   function maze() {
+    output_.innerHTML = '';
     CMDS_.push('forward', 'left', 'right', 'look')
     let playCount = 0;
     let playArray = [false, false, false, false];
@@ -455,7 +456,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     }
     window.setTimeout(function() {
       window.open("https://www.landingfestival.com")
-    }, 1000);
+    }, 7000);
   update();
 
   }
