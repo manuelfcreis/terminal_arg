@@ -22,6 +22,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   var cmdLine_ = document.querySelector(cmdLineContainer);
   var output_ = document.querySelector(outputContainer);
   let matrixHasPlayed = false
+  let MAZECMDS_ = ['look', 'forward', 'left', 'right'];
 
   let CMDS_ = [
     'open', 'clear', 'date', 'run', 'help', 'uname'
@@ -114,7 +115,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       if (phoneIsOn) {
         cmd = cmd.replace(/\D/, '')
         switch (cmd) {
-          case '5550690':
+          case '5350690':
             phoneIsOn = false
             maze()
             break;
@@ -126,13 +127,10 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       } else if (pillStage) {
         if (cmd.match(/blue/)) {
           location.reload();
-          break;
         } else if (cmd.match(/red/)) {
           redpill();
-          break;
         } else {
           write("red or blue there is no other choice")
-          break;
         }
       } else {
       switch (cmd) {
@@ -162,6 +160,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
          } else if (args.includes('rabbit.exe')) {
            output_.innerHTML = '';
            write(ascii(rabbit));
+           theClub(0);
          } else if (args.includes('maze.exe')) {
            maze();
          } else if (args.includes('phone.exe')) {
@@ -298,6 +297,104 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     return text.replace(/\s/g, '&nbsp;');
   }
 
+  // Particle effect from
+  var particleAlphabet = {
+    stop: function() {
+      ctx=null;
+    },
+
+  	Particle: function(x, y) {
+  		this.x = x;
+  		this.y = y;
+  		this.radius = 3.5;
+  		this.draw = function(ctx) {
+  			ctx.save();
+  			ctx.translate(this.x, this.y);
+  			ctx.fillStyle = 'green';
+        ctx.fillRect(0, 0, this.radius, this.radius);
+  			ctx.restore();
+  		};
+  	},
+  	init: function() {
+      console.log('hello')
+  		particleAlphabet.canvas = document.getElementById('number');
+  		particleAlphabet.ctx = particleAlphabet.canvas.getContext('2d');
+  		particleAlphabet.W = window.innerWidth;
+  		particleAlphabet.H = window.innerHeight;
+  		particleAlphabet.particlePositions = [];
+  		particleAlphabet.particles = [];
+  		particleAlphabet.tmpCanvas = document.createElement('canvas');
+  		particleAlphabet.tmpCtx = particleAlphabet.tmpCanvas.getContext('2d');
+
+  		particleAlphabet.canvas.width = particleAlphabet.W;
+  		particleAlphabet.canvas.height = particleAlphabet.H;
+
+  		setInterval(function(){
+  			particleAlphabet.changeLetter();
+  			particleAlphabet.getPixels(particleAlphabet.tmpCanvas, particleAlphabet.tmpCtx);
+  		}, 1200);
+
+  		particleAlphabet.makeParticles(1000);
+  		particleAlphabet.animate();
+  	},
+  	currentPos: 0,
+  	changeLetter: function() {
+  		var letters = '535-0690 535-0690 ',
+  			letters = letters.split('');
+  		particleAlphabet.time = letters[particleAlphabet.currentPos];
+  		particleAlphabet.currentPos++;
+  		if (particleAlphabet.currentPos == letters.length + 1) {
+  			document.getElementById('number').remove();
+  		}
+
+  	},
+
+  	makeParticles: function(num) {
+  		for (var i = 0; i <= num; i++) {
+  			particleAlphabet.particles.push(new particleAlphabet.Particle(particleAlphabet.W / 2 + Math.random() * 400 - 200, particleAlphabet.H / 2 + Math.random() * 400 -200));
+  		}
+  	},
+
+  	getPixels: function(canvas, ctx) {
+  		var keyword = particleAlphabet.time,
+  			gridX = 6,
+  			gridY = 6;
+  		canvas.width = window.innerWidth;
+  		canvas.height = window.innerHeight;
+  		ctx.fillStyle = 'red';
+  		ctx.font = 'italic bold 330px Noto Serif';
+  		ctx.fillText(keyword, canvas.width / 2 - ctx.measureText(keyword).width / 2, canvas.height / 2 + 100);
+  		var idata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  		var buffer32 = new Uint32Array(idata.data.buffer);
+  		if (particleAlphabet.particlePositions.length > 0) particleAlphabet.particlePositions = [];
+  		for (var y = 0; y < canvas.height; y += gridY) {
+  			for (var x = 0; x < canvas.width; x += gridX) {
+  				if (buffer32[y * canvas.width + x]) {
+  					particleAlphabet.particlePositions.push({x: x, y: y});
+  				}
+  			}
+  		}
+  	},
+  	animateParticles: function() {
+  		var p, pPos;
+  		for (var i = 0, num = particleAlphabet.particles.length; i < num; i++) {
+  			p = particleAlphabet.particles[i];
+  			pPos = particleAlphabet.particlePositions[i];
+  			if (particleAlphabet.particles.indexOf(p) === particleAlphabet.particlePositions.indexOf(pPos)) {
+  			p.x += (pPos.x - p.x) * .3;
+  			p.y += (pPos.y - p.y) * .3;
+  			p.draw(particleAlphabet.ctx);
+  		}
+  		}
+  	},
+  	animate: function() {
+  		requestAnimationFrame(particleAlphabet.animate);
+  		particleAlphabet.ctx.fillStyle = 'rgba(0,0,0, .8)';
+  		particleAlphabet.ctx.fillRect(0, 0, particleAlphabet.W, particleAlphabet.H);
+  		particleAlphabet.animateParticles();
+  	}
+  };
+
   // taken from https://stackoverflow.com/questions/7264974/show-text-letter-by-letter
   function typeOut(text, index, interval){
     if (index < text.length) {
@@ -321,20 +418,19 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   // Matrix Functions
 
   function theMatrix(interval) {
-    window.setTimeout(function() { write('.') }, interval);
-    window.setTimeout(function() { write('.') }, interval + 1000);
-    window.setTimeout(function() { write('.') }, interval + 2000);
-    window.setTimeout(function() { write('<br>') }, interval + 2000);
-    window.setTimeout(function() { typeOut("Wake up Neo", 0, 150) }, interval + 5000);
-    window.setTimeout(function() { typeOut("The Matrix has you", 0, 150) }, interval + 10000);
-    window.setTimeout(function() { typeOut("Follow the White Rabbit", 0, 150) }, interval + 20000);
+    window.setTimeout(function() { typeOut("Wake up Neo", 0, 150) }, interval);
+    window.setTimeout(function() { typeOut("The Matrix has you", 0, 150) }, interval + 3000);
+    window.setTimeout(function() { typeOut("Follow the White Rabbit", 0, 150) }, interval + 6000);
     matrixHasPlayed = true
   }
 
   function theClub(interval) {
-    window.setTimeout(function() { typeOut("I know why you're here", 0, 150) }, interval + 5000);
-    window.setTimeout(function() { typeOut("I know what you've been going through", 0, 150) }, interval + 10000);
-    window.setTimeout(function() { typeOut("You're looking for it", 0, 150) }, interval + 20000);
+    window.setTimeout(function() { typeOut("I know why you're here", 0, 150) }, interval);
+    window.setTimeout(function() { typeOut("I know what you've been going through", 0, 100) }, interval + 4000);
+    window.setTimeout(function() { typeOut("You're looking for it", 0, 100) }, interval + 10000);
+    window.setTimeout(function() { output_.innerHTML = '' }, interval + 15000);
+    window.setTimeout(function() { particleAlphabet.init() }, interval + 15500);
+    window.setTimeout(function() { particleAlphabet.stop() }, interval + 25000);
   }
   //
   return {
@@ -348,7 +444,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
   function maze() {
     output_.innerHTML = '';
-    MAZECMDS_ = ('look', 'forward', 'left', 'right')
     let playCount = 0;
     let playArray = [false, false, false, false];
     mazeStage = true;
