@@ -477,6 +477,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
 
   function redpill() {
+    output_.innerHTML = '';
     $('.header').hide
     $('#container').hide
     var canvas = document.getElementById( 'canvas' ),
