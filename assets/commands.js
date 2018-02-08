@@ -24,8 +24,9 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   let matrixHasPlayed = false
 
   let CMDS_ = [
-    'open', 'clear', 'date', 'run', 'help', 'uname', 'whoami'
+    'open', 'clear', 'date', 'run', 'help', 'uname'
   ];
+
 
   let LIST_ = [
     'README.md', 'assets', 'example_url', 'images'
@@ -111,38 +112,38 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       }
 
       if (phoneIsOn) {
+        cmd = cmd.replace(/\D/, '')
         switch (cmd) {
-          case '555-0690':
+          case '5550690':
             phoneIsOn = false
             maze()
             break;
           default:
-            output('Couldn\'t connect to that phone number, goodbye!')
+            output('Phone numbers should be ###-####!')
             phoneIsOn = false
             break;
           };
       } else if (pillStage) {
-          switch (cmd) {
-            case 'blue':
-              location.reload();
-              break;
-            case 'red':
-              redpill();
-              break;
-            default:
-              write("red or blue there is no other choice")
-              break;
-          }
+        if (cmd.match(/blue/)) {
+          location.reload();
+          break;
+        } else if (cmd.match(/red/)) {
+          redpill();
+          break;
+        } else {
+          write("red or blue there is no other choice")
+          break;
+        }
       } else {
       switch (cmd) {
         case 'open':
           var url = args.join(' ');
           if (!url) {
             output('Usage: ' + cmd + ' website...');
-            output('Example: ' + cmd + ' https://www.enso.pt/example_url.html');
+            output('Example: ' + cmd + ' https://www.enso.pt/rabbit.html');
             break;
-          } else if (url == "https://www.enso.pt/example_url.html") {
-            window.open("example_url.html")
+          } else if (url == "https://www.enso.pt/rabbit.html") {
+            window.open("rabbit.html")
           } else {
           $.get( url, function(data) {
             window.open(url)
@@ -173,7 +174,11 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
          }
          break;
         case 'help':
-          output('<div class="ls-files">' + CMDS_.join('<br>') + '</div>');
+          if (mazeStage){
+            output('<div class="ls-files">' + MAZECMDS_.join('<br>') + '</div>')
+          } else {
+            output('<div class="ls-files">' + CMDS_.join('<br>') + '</div>');
+          }
           break;
         case 'uname':
           output(navigator.appVersion);
@@ -343,11 +348,12 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
   function maze() {
     output_.innerHTML = '';
-    CMDS_.push('forward', 'left', 'right', 'look')
+    MAZECMDS_ = ('look', 'forward', 'left', 'right')
     let playCount = 0;
     let playArray = [false, false, false, false];
     mazeStage = true;
     write(ascii(mazeScreen));
+    write("You're in a maze of cubicles")
   }
 
   function raisePlayCount() {
@@ -455,6 +461,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       requestAnimationFrame(update);
     }
     window.setTimeout(function() {
+      write('https://landingfestival.com')
       window.open("https://www.landingfestival.com")
     }, 7000);
   update();
