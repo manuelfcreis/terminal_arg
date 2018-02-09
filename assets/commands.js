@@ -138,9 +138,9 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
           var url = args.join(' ');
           if (!url) {
             output('Usage: ' + cmd + ' website...');
-            output('Example: ' + cmd + ' https://www.enso.pt/rabbit.html');
+            output('Example: ' + cmd + ' http://www.followthewhiterabbit.tech/rabbit.html');
             break;
-          } else if (url == "https://www.enso.pt/rabbit.html") {
+          } else if (url.match(/followthewhiterabbit.tech\/rabbit/)) {
             window.open("rabbit.html")
           } else {
           $.get( url, function(data) {
@@ -448,7 +448,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     let playArray = [false, false, false, false];
     mazeStage = true;
     write(ascii(mazeScreen));
-    write("You're in a maze of cubicles")
+    write("<br> You're in a maze of cubicles")
   }
 
   function raisePlayCount() {
@@ -558,6 +558,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     }
     window.setTimeout(function() {
       write('https://landingfestival.com')
+      write('You can use the promocode - LFB18-WhiteRabbit - for 20% off your ticket')
       window.open("https://www.landingfestival.com")
     }, 7000);
   update();
