@@ -190,7 +190,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
           break;
         case 'forward':
           if (mazeStage === true) {
-            if (playCount === 0 || 3) {
+            if (playCount === 0 || playCount === 3) {
               playArray[playCount] = true
               if (checkEndGame()) {
                 endGame();
@@ -466,6 +466,8 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
 
   function checkEndGame() {
+    console.log(playArray)
+    console.log(playCount)
     if (playArray.every(function(element) { return element === true })) {
       return true
     }
