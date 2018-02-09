@@ -316,7 +316,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   		};
   	},
   	init: function() {
-      console.log('hello')
   		particleAlphabet.canvas = document.getElementById('number');
   		particleAlphabet.ctx = particleAlphabet.canvas.getContext('2d');
   		particleAlphabet.W = window.innerWidth;
@@ -466,8 +465,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
 
   function checkEndGame() {
-    console.log(playArray)
-    console.log(playCount)
     if (playArray.every(function(element) { return element === true })) {
       return true
     }
@@ -559,7 +556,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       requestAnimationFrame(update);
     }
     window.setTimeout(function() {
-      write('https://landingfestival.com')
+      write('https://landingfestival.com<br>')
       write('You can use the promocode - LFB18-WhiteRabbit - for 20% off your ticket')
       window.open("https://www.landingfestival.com")
     }, 7000);
