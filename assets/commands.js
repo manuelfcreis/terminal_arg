@@ -4,6 +4,7 @@ let matrixHasPlayed = false
 let playCount = 0
 let playArray = [false, false, false, false]
 let pillStage = false
+let time_ = Date.now()
 
 // Level Variables
 let rabbitStage = false
@@ -555,11 +556,22 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
 
       requestAnimationFrame(update);
     }
+    time_ = (Date.now() - time_);
+    var minutes = Math.floor(time_ / 60000);
+    var seconds = ((time_ % 60000) / 1000).toFixed(0);
+    console.log(minutes)
+    console.log(seconds)
+    console.log(time_)
+
     window.setTimeout(function() {
-      write('https://landingfestival.com<br>')
-      write('You can use the promocode - LFB18-WhiteRabbit - for 20% off your ticket')
+      write('<p><strong>Fasten your seat belt Dorothy, ’cause Kansas is going bye-bye.</strong></p>')
+      write('Congratulations on completing the terminal in ' + minutes + ' minutes and ' + seconds + ' seconds.<br>')
+      write('You just won an access pass to the Landing Festival! Want to see how deep the rabbit hole goes?<br>')
+      write('You can use the promocode - LFB18-WhiteRabbit - Just go to https://landingfestival.com and claim your ticket<br>')
+    }, 3000);
+    window.setTimeout(function() {
       window.open("https://www.landingfestival.com")
-    }, 7000);
+    }, 12000);
   update();
 
   }
