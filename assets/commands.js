@@ -566,8 +566,10 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     window.setTimeout(function() {
       write('<p><strong>Fasten your seat belt Dorothy, ’cause Kansas is going bye-bye.</strong></p>')
       write('Congratulations on completing the terminal in ' + minutes + ' minutes and ' + seconds + ' seconds.<br>')
-      write('You just won an <strong>Access Pass</strong> to the Landing Festival! Want to see how deep the rabbit hole goes?<br>')
-      write('You can use the promocode - LFB18-WhiteRabbit - Just go to <strong><a href="https://landingfestival.com/berlin/tickets" target="_blank">https://landingfestival.com</a></strong> and claim your ticket<br>')
+      write('You just won a <strong>Discount Code</strong> to the Landing Festival! Want to see how deep the rabbit hole goes?<br>')
+      write('Just go to <strong><a href="https://landingfestival.com/berlin/tickets" target="_blank">https://landingfestival.com</a></strong> and claim your ticket<br>')
+      write('You can use the promo code - LFB18-WhiteRabbit - for a <strong>free Access Pass</strong><br>')
+      write('Or the code - LFB18-RedPill - for 50% off your <strong>Premium Pass</strong><br>')
     }, 3000);
     window.setTimeout(function() {
       window.open("https://www.landingfestival.com")
