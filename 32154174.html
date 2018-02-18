@@ -11,22 +11,26 @@
   </head>
   <body>
     <div id="container">
-      <p>Why 2 a raven like 1 writing desk?</p>
-      <form action="">
-        <input class="raven" id="one" type="text">
-        <input class="raven" id="two" type="text">
-        <input class="raven" id="three" type="text">
-        <input class="raven" id="four" type="text">
-        <input class="raven" id="five" type="text">
-        <input class="raven" id="six" type="text">
-        <input class="raven" id="seven" type="text">
-        <input class="raven" id="eight" type="text">
-        <br>
-        <input class="rvn-button" type="submit" value="button">
-      </form>
+      <p><strong>Alice:</strong> Would you tell me, please, which way I ought to go from here?</p>
+      <p><strong>The Cheshire Cat:</strong> That depends a good deal on where you want to get to.</p>
+      <p><strong>Alice:</strong>
+        <select id="direction">
+          <option value="forward">Forward</option>
+          <option value="left">Left</option>
+          <<option value="right">Right</option>
+        </select>
+        </p>
+      <p><strong>The Cheshire Cat:</strong> Then it doesn't much matter which way you go.</p>
+      <p><strong>Alice:</strong> ...So long as I get somewhere.</p>
+      <p><strong>The Cheshire Cat:</strong> Oh, you're sure to do that, if only you walk long enough.</p>
 
+      <button id="walk">Walk</button>
+
+      <div>
+        <p>You have walked <span id="counter">0</span> steps</p>
+      </div>
       <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script src="assets/raven.js"></script>
+      <script src="assets/alice.js"></script>
     </div>
   </body>
 </html>
