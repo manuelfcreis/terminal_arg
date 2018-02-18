@@ -5,7 +5,6 @@ let playCount = 0
 let playArray = [false, false, false, false]
 let pillStage = false
 let time_ = Date.now()
-let hardMode = false
 
 // Level Variables
 let rabbitStage = false
@@ -27,7 +26,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   let MAZECMDS_ = ['look', 'forward', 'left', 'right'];
 
   let CMDS_ = [
-    'open', 'clear', 'date', 'run', 'help', 'uname'
+    'open', 'clear', 'date', 'run', 'help', 'hard_mode'
   ];
 
   var history_ = [];
@@ -113,6 +112,9 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
             phoneIsOn = false
             maze()
             break;
+          case '5551111':
+            window.location.replace(`${cmd}.html`)
+            break;
           default:
             output('Phone numbers should be ###-####!')
             phoneIsOn = false
@@ -122,7 +124,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
         if (cmd.match(/blue/)) {
           location.reload();
         } else if (cmd.match(/red/)) {
-          redpill();
+          window.location.replace(`5350690.html`);
         } else {
           write("red or blue there is no other choice")
         }
@@ -152,8 +154,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
          if (args.includes('matrix.exe')) {
            window.setTimeout(theMatrix(), 1000);
          } else if (args.includes('rabbit.exe')) {
-           output_.innerHTML = '';
-           write(ascii(rabbit));
            theClub(0);
          } else if (args.includes('maze.exe')) {
            maze();
@@ -176,11 +176,10 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
         case 'uname':
           output(navigator.appVersion);
           break;
-        case 'whoami':
-          var result = "<img src=\"" + codehelper_ip["Flag"]+ "\"><br><br>";
-          for (var prop in codehelper_ip)
-            result += prop + ": " + codehelper_ip[prop] + "<br>";
-          output(result);
+        case 'hard_mode':
+          write("I've been waiting for you.<br>");
+          write("Don't trust what you see.<br>");
+          write("Follow the white rabbit...");
           break;
         case 'forward':
           if (mazeStage === true) {
@@ -418,12 +417,12 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   }
 
   function theClub(interval) {
-    window.setTimeout(function() { typeOut("I know why you're here", 0, 150) }, interval);
-    window.setTimeout(function() { typeOut("I know what you've been going through", 0, 100) }, interval + 4000);
-    window.setTimeout(function() { typeOut("You're looking for it", 0, 100) }, interval + 10000);
-    window.setTimeout(function() { output_.innerHTML = '' }, interval + 15000);
-    window.setTimeout(function() { particleAlphabet.init() }, interval + 15500);
-    window.setTimeout(function() { particleAlphabet.stop() }, interval + 25000);
+    output_.innerHTML = '';
+    window.setTimeout(function() { output_.innerHTML = '' }, interval);
+    window.setTimeout(function() { particleAlphabet.init() }, interval + 500);
+    window.setTimeout(function() { particleAlphabet.stop() }, interval + 10000);
+    window.setTimeout(function() {     output_.innerHTML = '' } , interval + 15000);
+    window.setTimeout(function() { write(ascii(rabbit)) } , interval + 16000);
   }
   //
   return {
@@ -435,6 +434,7 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
       },
     output: output
   }
+
   function maze() {
     output_.innerHTML = '';
     let playCount = 0;
@@ -467,108 +467,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
   function endGame() {
     output_.innerHTML = '';
     pill();
-  }
-
-  function redpill() {
-    output_.innerHTML = '';
-    $('.header').hide
-    $('#container').hide
-    var canvas = document.getElementById( 'canvas' ),
-		ctx = canvas.getContext( '2d' ),
-    canvas2 = document.getElementById( 'canvas2' ),
-    ctx2 = ctx
-		// full screen dimensions
-		cw = window.innerWidth,
-		ch = window.innerHeight,
-    charArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
-    maxCharCount = 100,
-    fallingCharArr = [],
-    fontSize = 10,
-    maxColums = cw/(fontSize);
-    canvas.width = canvas2.width = cw;
-    canvas.height = canvas2.height = ch;
-
-
-    function randomInt( min, max ) {
-    	return Math.floor(Math.random() * ( max - min ) + min);
-    }
-
-    function randomFloat( min, max ) {
-    	return Math.random() * ( max - min ) + min;
-    }
-
-    function Point(x,y)
-    {
-      this.x = x;
-      this.y = y;
-    }
-
-    Point.prototype.draw = function(ctx){
-
-      this.value = charArr[randomInt(0,charArr.length-1)].toUpperCase();
-      this.speed = randomFloat(1,5);
-
-
-      ctx2.fillStyle = "rgba(255,255,255,0.8)";
-      ctx2.font = fontSize+"px san-serif";
-      ctx2.fillText(this.value,this.x,this.y);
-
-        ctx.fillStyle = "#0F0";
-        ctx.font = fontSize+"px san-serif";
-        ctx.fillText(this.value,this.x,this.y);
-
-
-
-        this.y += this.speed;
-        if(this.y > ch)
-        {
-          this.y = randomFloat(-100,0);
-          this.speed = randomFloat(2,5);
-        }
-    }
-
-    for(var i = 0; i < maxColums ; i++) {
-      fallingCharArr.push(new Point(i*fontSize,randomFloat(-500,0)));
-    }
-
-
-    var update = function()
-    {
-
-    ctx.fillStyle = "rgba(0,0,0,0.05)";
-    ctx.fillRect(0,0,cw,ch);
-
-    ctx2.clearRect(0,0,cw,ch);
-
-      var i = fallingCharArr.length;
-
-      while (i--) {
-        fallingCharArr[i].draw(ctx);
-        var v = fallingCharArr[i];
-      }
-
-      requestAnimationFrame(update);
-    }
-    time_ = (Date.now() - time_);
-    var minutes = Math.floor(time_ / 60000);
-    var seconds = ((time_ % 60000) / 1000).toFixed(0);
-    console.log(minutes)
-    console.log(seconds)
-    console.log(time_)
-
-    window.setTimeout(function() {
-      write('<p><strong>Fasten your seat belt Dorothy, ’cause Kansas is going bye-bye.</strong></p>')
-      write('Congratulations on completing the terminal in ' + minutes + ' minutes and ' + seconds + ' seconds.<br>')
-      write('You just won a <strong>Discount Code</strong> to the Landing Festival! Want to see how deep the rabbit hole goes?<br>')
-      write('Just go to <strong><a href="https://landingfestival.com/berlin/tickets" target="_blank">https://landingfestival.com</a></strong> and claim your ticket<br>')
-      write('You can use the promo code - LFB18-WhiteRabbit - for a <strong>free Access Pass</strong><br>')
-      write('Or the code - LFB18-RedPill - for 50% off your <strong>Premium Pass</strong><br>')
-    }, 3000);
-    window.setTimeout(function() {
-      window.open("https://www.landingfestival.com")
-    }, 12000);
-  update();
-
   }
 
   function pill() {
@@ -620,7 +518,7 @@ const mazeScreen = "    \\                           /         " + "<br>" +
               "      (#####&&&####(%%%%%%%%%" + "<br>" +
               "       (###########(%%%%%%0%%%%" + "<br>" +
               "      %%(###########(%%%%%%%%%%%%" + "<br>" +
-              "     ;%%%(####6#####'%%%'%%%%%%%%%" + "<br>" +
+              "     ;%%%(5551111####'%%%'%%%%%%%%%" + "<br>" +
               "    (%%%%; ;n####n'%%%%'n%%%%%%%%%%(@)" + "<br>" +
               "     \\%%%' %%nnnn'%%%%'nnnn%%%%%%%(@@@)" + "<br>" +
               "      ``' %%%nnnn``'nnnnnn%%%%%%%%(@@@@)" + "<br>" +
