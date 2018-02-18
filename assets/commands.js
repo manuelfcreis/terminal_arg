@@ -5,6 +5,7 @@ let playCount = 0
 let playArray = [false, false, false, false]
 let pillStage = false
 let time_ = Date.now()
+let hardMode = false
 
 // Level Variables
 let rabbitStage = false
@@ -29,13 +30,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
     'open', 'clear', 'date', 'run', 'help', 'uname'
   ];
 
-
-  let LIST_ = [
-    'README.md', 'assets', 'example_url', 'images'
-  ]
-
-  var fs_ = null;
-  var cwd_ = null;
   var history_ = [];
   var histpos_ = 0;
   var histtemp_ = 0;
@@ -85,7 +79,6 @@ var Terminal = Terminal || function(cmdLineContainer, outputContainer) {
 
   //
   function processNewCommand_(e) {
-
     if (e.keyCode == 9) { // tab
       e.preventDefault();
       // Implement tab suggest.
