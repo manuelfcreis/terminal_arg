@@ -11,7 +11,7 @@ function unloadJS() {
 $('#walk').on('click', function(ev){
   ev.preventDefault();
   let way = $('#direction').val()
-  way = way.toLowerCase().gsub(/[^a-z]/g, '');
+  way = way.toLowerCase().replace(/[^a-z]/g, '');
   if (way === "idontmuchcarewhere") {
     window.location.replace(where + ".html")
   } else {
